@@ -25,8 +25,7 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
-      description:
-        'disallow registering components that are not used inside templates',
+      description: 'disallow registering components that are not used inside templates',
       category: 'essential'
     },
     fixable: null,
@@ -132,9 +131,7 @@ module.exports = {
       },
       myUtils.executeOnVue(context, obj => {
         if (obj.type === 'ClassDeclaration') {
-          registeredComponents = getRegisteredComponentsFromClassDeclaration(
-            obj
-          )
+          registeredComponents = getRegisteredComponentsFromClassDeclaration(obj)
         } else {
           registeredComponents = myUtils.getRegisteredComponents(obj)
         }
@@ -147,10 +144,6 @@ const getRegisteredComponentsFromClassDeclaration = obj => {
   const decorators = obj.decorators
   if (!decorators) return []
   const expression = decorators[0].expression
-  if (
-    !(expression && expression.arguments && expression.arguments.length >= 1)
-  ) {
-    return []
-  }
-  return myUtils.getRegisteredComponents(expression.arguments[0])
+  const hasArguments = expression && expression.arguments && expression.arguments.length >= 1
+  return hasArguments ? myUtils.getRegisteredComponents(expression.arguments[0]) : []
 }
